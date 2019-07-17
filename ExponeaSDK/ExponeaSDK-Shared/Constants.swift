@@ -73,6 +73,8 @@ enum Constants {
     enum Session {
         static let defaultTimeout = 6.0
         static let maxRetries = 5
+        static let flushDelay = 30.0
+        static let sessionUpdateThreshold = 3.0
     }
 
     /// General constants
@@ -80,5 +82,6 @@ enum Constants {
         static let iTunesStore = "iTunes Store"
         static let userDefaultsSuite = "ExponeaSDK"
         static let deliveredPushUserDefaultsKey = "EXPONEA_DELIVERED_PUSH_TRACKING"
+        static let savedCampaignClickEvent = "EXPONEA_SAVED_CAMPAIGN_CLICK"
     }
 }

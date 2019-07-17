@@ -19,17 +19,52 @@ extension Exponea {
         }
     }
     
+    internal func processCampaignData() {
+        let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
+        guard var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) as? [Data] else { return }
+        let decoder = JSONDecoder()
+        // last registered campaign click should be appended to session start event
+        if let lastEvent = events.popLast(),
+            let campaignData = try? decoder.decode(CampaignData.self, from: lastEvent) {
+            trackCampaignClick(url: campaignData.url, timestamp: nil)
+        }
+        // track remaining events
+        for event in events {
+            guard let campaignData = try? decoder.decode(CampaignData.self, from: event),
+                let campaignDataProperties = campaignData.campaignData as? [String: JSONConvertible] else { continue }
+            trackEvent(properties: campaignDataProperties, timestamp: campaignData.timestamp, eventType: Constants.EventTypes.campaignClick)
+        }
+        // remove all stored events if processed
+        userDefaults?.removeObject(forKey: Constants.General.deliveredPushUserDefaultsKey)
+    }
+    
+    fileprivate func saveCampaignData(campaignData: CampaignData) {
+        let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
+        var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) ?? []
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(campaignData) {
+            events.append(encoded)
+        }
+        userDefaults?.set(events, forKey: Constants.General.savedCampaignClickEvent)
+    }
+    
     public func trackCampaignClick(url: URL, timestamp: Double?) {
+        let data = CampaignData(url: url)
         Exponea.logger.log(.verbose, message: "Link Open event registred for path : \(url.description)")
+        if !isConfigured {
+            saveCampaignData(campaignData: data)
+            return
+        }
         executeWithDependencies { dependencies in
+            // Create initial data
             guard dependencies.configuration.authorization != Authorization.none else {
                 throw ExponeaError.authorizationInsufficient("token, basic")
             }
-            // Create initial data
-            let data = CampaignData(url: url)
             // Do the actual tracking
-            try dependencies.trackingManager.track(.campaignClick, with: [data.campaignData])
-            try dependencies.trackingManager.updateEvent(Constants.EventTypes.sessionStart, with: data.utmData)
+            try dependencies.trackingManager.track(.campaignClick, with: [data.campaignDataProperties])
+            if dependencies.trackingManager.canUpdateEvent(forType: .campaignClick) {
+                try dependencies.trackingManager.updateEvent(Constants.EventTypes.sessionStart, with: data.utmData)
+            }
         }
     }
 

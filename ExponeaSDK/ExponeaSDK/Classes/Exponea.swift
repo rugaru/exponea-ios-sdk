@@ -132,6 +132,7 @@ public class Exponea: ExponeaType {
             self.trackingManager = TrackingManager(repository: repository,
                                                    database: database,
                                                    userDefaults: userDefaults)
+            processCampaignData()
         } catch {
             // Failing gracefully, if setup failed
             Exponea.logger.log(.error, message: """
@@ -171,7 +172,15 @@ internal extension Exponea {
 public extension Exponea {
     
     // MARK: - Configure -
-    
+
+    var isConfigured: Bool {
+        get {
+            if let _ = configuration, let _ = repository, let _ = trackingManager {
+                return true
+            }
+            return false
+        }
+    }
     /// Initialize the configuration without a projectMapping (token mapping) for each type of event.
     ///
     /// - Parameters:

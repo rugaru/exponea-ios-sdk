@@ -167,12 +167,21 @@ open class TrackingManager {
 // MARK: -
 
 extension TrackingManager: TrackingManagerType {
-    open func updateEvent(_ type: String, with data: DataType) throws {
-        if type == Constants.EventTypes.sessionStart {
-            if !canUpdateSession {
+    func canUpdateEvent(forType type: EventType) -> Bool {
+        switch type {
+        case .campaignClick:
+            // if session is not running, start it to be able to update session with utm params
+            if sessionStartTime == 0 {
                 try? triggerSessionStart()
             }
+            // check session conditions for updating start event (used for track universal link)
+            return canUpdateSession
+        default:
+            return true
         }
+    }
+
+    open func updateEvent(_ type: String, with data: DataType) throws {
         try database.updateEvent(type, with: data)
     }
 
@@ -205,7 +214,7 @@ extension TrackingManager: TrackingManagerType {
         
         // If we have immediate flushing mode, flush after tracking
         if case .immediate = flushingMode {
-            flushDataWith(delay: 10.0)
+            flushDataWith(delay: Constants.Session.flushDelay)
         }
     }
 
@@ -279,11 +288,11 @@ extension TrackingManager {
             userDefaults.set(newValue, forKey: Constants.Keys.sessionBackgrounded)
         }
     }
-    
+
     var canUpdateSession: Bool {
         if sessionStartTime != 0 &&
             sessionEndTime == 0
-            && (Date().timeIntervalSince1970 - sessionStartTime) < 3.0
+            && (Date().timeIntervalSince1970 - sessionStartTime) < Constants.Session.sessionUpdateThreshold
         {
             return true
         }
@@ -711,7 +720,7 @@ extension TrackingManager {
         switch flushingMode {
         case .immediate:
             // Immediately flush any data we might have
-            flushDataWith(delay: 10.0)
+            flushDataWith(delay: Constants.Session.flushDelay)
             
         case .periodic(let interval):
             // Schedule a timer for the specified interval

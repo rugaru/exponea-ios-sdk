@@ -33,6 +33,8 @@ protocol TrackingManagerType: class {
     /// - type: Type of event you want to update.
     /// - data: update data
     func updateEvent(_ type: String, with data: DataType) throws
+    
+    func canUpdateEvent(forType type: EventType) -> Bool
     // MARK: - Session -
     
     /// Starts a session and tracks the event.

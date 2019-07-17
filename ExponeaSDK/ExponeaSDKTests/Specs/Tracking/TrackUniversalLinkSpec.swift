@@ -2,7 +2,7 @@
 //  TrackUniversalLinkSpec.swift
 //  ExponeaSDKTests
 //
-//  Created by arpad jakab on 07/06/2019.
+//  Created by Panaxeo on 07/06/2019.
 //  Copyright © 2019 Exponea. All rights reserved.
 //
 
