@@ -20,15 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Exponea.logger = AppDelegate.memoryLogger
         Exponea.logger.logLevel = .verbose
-//
-//        let url = UserDefaults.standard.string(forKey: "savedUrl") ?? "https://api.exponea.com"
-//        let token = UserDefaults.standard.string(forKey: "savedToken") ?? ""
-//        let auth = Authorization.token(UserDefaults.standard.string(forKey: "savedAuth") ?? "")
-//        Exponea.shared.configure(projectToken: token,
-//                                 authorization: auth,
-//                                 baseUrl: url,
-//                                 appGroup: "group.com.Exponea.ExponeaSDK-Example")
-        
+
         UITabBar.appearance().tintColor = UIColor(red: 28/255, green: 23/255, blue: 50/255, alpha: 1.0)
         
         application.applicationIconBadgeNumber = 0

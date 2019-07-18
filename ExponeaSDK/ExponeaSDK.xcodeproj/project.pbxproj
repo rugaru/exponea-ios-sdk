@@ -33,6 +33,7 @@
 		23E725E4214AA7A900B552B8 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E725E3214AA7A900B552B8 /* Reachability.swift */; };
 		B40E9F5D22FAD25A0085B8A1 /* TokenTrackFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40E9F5C22FAD25A0085B8A1 /* TokenTrackFrequency.swift */; };
 		4C169E3122B6524C00C425DA /* TrackUniversalLinkSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C169E3022B6524C00C425DA /* TrackUniversalLinkSpec.swift */; };
+		4C3F5F2D22DF98C00069E71D /* MockExponea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F5F2C22DF98C00069E71D /* MockExponea.swift */; };
 		4C588F8722AAAB3400916EE4 /* CampaignData+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C588F8622AAAB3300916EE4 /* CampaignData+Properties.swift */; };
 		4C6BD13622ABA743004487A8 /* CampaignData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6BD13522ABA743004487A8 /* CampaignData.swift */; };
 		4CA1874722C931B80098A1EA /* NSManagedObject+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1874622C931B80098A1EA /* NSManagedObject+Name.swift */; };
@@ -299,6 +300,7 @@
 		080033AD83490110B7A029BD /* Pods_ExponeaSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExponeaSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E725E3214AA7A900B552B8 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		4C169E3022B6524C00C425DA /* TrackUniversalLinkSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackUniversalLinkSpec.swift; sourceTree = "<group>"; };
+		4C3F5F2C22DF98C00069E71D /* MockExponea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExponea.swift; sourceTree = "<group>"; };
 		4C588F8622AAAB3300916EE4 /* CampaignData+Properties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CampaignData+Properties.swift"; sourceTree = "<group>"; };
 		4C6BD13522ABA743004487A8 /* CampaignData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignData.swift; sourceTree = "<group>"; };
 		4CA1874622C931B80098A1EA /* NSManagedObject+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Name.swift"; sourceTree = "<group>"; };
@@ -1034,6 +1036,7 @@
 				F04BEA9C2111B5DF00591950 /* MockRepository.swift */,
 				C084D0EA2181C5EA005C0CA8 /* MockUserNotificationCenter.swift */,
 				F063BEA9207E36E600030811 /* MockDatabase.swift */,
+				4C3F5F2C22DF98C00069E71D /* MockExponea.swift */,
 			);
 			path = Mocking;
 			sourceTree = "<group>";
@@ -1435,7 +1438,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Mockingjay/Mockingjay.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
@@ -1450,7 +1453,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1606,6 +1609,7 @@
 			files = (
 				F0BE610721108E070082ABD8 /* CustomerParametersSpec.swift in Sources */,
 				F0BE610E2110A2910082ABD8 /* ExponeaErrorSpec.swift in Sources */,
+				4C3F5F2D22DF98C00069E71D /* MockExponea.swift in Sources */,
 				F0BE60F9211067B20082ABD8 /* RecommendationRequestSpec.swift in Sources */,
 				F03E4B8720848E970051ED80 /* TrackSessionSpec.swift in Sources */,
 				F0BE6105211080F30082ABD8 /* MockData.swift in Sources */,

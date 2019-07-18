@@ -22,22 +22,29 @@ extension Exponea {
     internal func processCampaignData() {
         let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
         guard var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) as? [Data] else { return }
-        let decoder = JSONDecoder()
-        // last registered campaign click should be appended to session start event
-        if let lastEvent = events.popLast(),
-            let campaignData = try? decoder.decode(CampaignData.self, from: lastEvent) {
-            trackCampaignClick(url: campaignData.url, timestamp: nil)
-        }
-        // track remaining events
-        for event in events {
-            guard let campaignData = try? decoder.decode(CampaignData.self, from: event),
-                let campaignDataProperties = campaignData.campaignData as? [String: JSONConvertible] else { continue }
-            trackEvent(properties: campaignDataProperties, timestamp: campaignData.timestamp, eventType: Constants.EventTypes.campaignClick)
-        }
+        trackLastCampaignEvent(events.popLast())
+        processCampaignEvents(events)
         // remove all stored events if processed
         userDefaults?.removeObject(forKey: Constants.General.deliveredPushUserDefaultsKey)
     }
     
+    // last registered campaign click should be appended to session start event
+    private func trackLastCampaignEvent(_ lastEvent: Data?) {
+        if let lastEvent = lastEvent,
+            let campaignData = try? JSONDecoder().decode(CampaignData.self, from: lastEvent) {
+            trackCampaignClick(url: campaignData.url, timestamp: nil)
+        }
+    }
+    
+    // track remaining events
+    private func processCampaignEvents(_ events: [Data]) {
+        for event in events {
+            guard let campaignData = try? JSONDecoder().decode(CampaignData.self, from: event),
+                let campaignDataProperties = campaignData.campaignData as? [String: JSONConvertible] else { continue }
+            trackEvent(properties: campaignDataProperties, timestamp: campaignData.timestamp, eventType: Constants.EventTypes.campaignClick)
+        }
+    }
+
     fileprivate func saveCampaignData(campaignData: CampaignData) {
         let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
         var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) ?? []

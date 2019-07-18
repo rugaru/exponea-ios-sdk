@@ -181,7 +181,7 @@ extension TrackingManager: TrackingManagerType {
         }
     }
 
-    open func updateEvent(_ type: String, with data: DataType) throws {
+    func updateEvent(_ type: String, with data: DataType) throws {
         try database.updateEvent(type, with: data)
     }
 

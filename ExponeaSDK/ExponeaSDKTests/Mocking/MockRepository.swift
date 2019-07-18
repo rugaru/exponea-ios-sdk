@@ -324,7 +324,7 @@ extension MockRepository: FetchRepository {
         let data = retrieveDataFromFile(with: "get-consents", fileType: "json")
 
         /// Prepare the stub response.
-        guard let stubResponse = HTTPURLResponse(url: request.url!, statusCode: 200,
+        guard let stubResponse = HTTPURLResponse(url: request!.url!, statusCode: 200,
                                                  httpVersion: nil, headerFields: nil) else {
             fatalError("It was not possible to mock the HTTP response.")
         }
@@ -337,7 +337,7 @@ extension MockRepository: FetchRepository {
         }
 
         session
-            .dataTask(with: request, completionHandler: router.handler(with: completion))
+            .dataTask(with: request!, completionHandler: router.handler(with: completion))
             .resume()
     }
 }

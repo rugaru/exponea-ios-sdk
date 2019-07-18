@@ -13,7 +13,6 @@ extension CampaignData {
         get {
             var data: [String: JSONValue] = [:]
             guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true),
-                let _ = components.path,
                 let params = components.queryItems else { return .properties(data) }
             params.forEach {
                 if $0.name.starts(with: "utm") {
