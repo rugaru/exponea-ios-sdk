@@ -65,7 +65,7 @@ extension Exponea {
         executeWithDependencies { dependencies in
             // Create initial data
             guard dependencies.configuration.authorization != Authorization.none else {
-                throw ExponeaError.authorizationInsufficient("token, basic")
+                throw ExponeaError.authorizationInsufficient("token")
             }
             // Do the actual tracking
             try dependencies.trackingManager.track(.campaignClick, with: [data.campaignDataProperties])
