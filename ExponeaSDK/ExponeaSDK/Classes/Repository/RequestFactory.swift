@@ -40,13 +40,9 @@ public struct RequestFactory {
 extension RequestFactory {
     func prepareRequest(authorization: Authorization,
                         parameters: RequestParametersType? = nil,
-                        customerIds: [String: JSONValue]? = nil) -> URLRequest? {
-        guard let urlPath = URL(string: path) else {
-            Exponea.logger.log(.verbose, message: "Dropping request \(path) - wrong URL")
-            return nil
-        }
-        var request = URLRequest(url: urlPath)
-        
+                        customerIds: [String: JSONValue]? = nil) -> URLRequest {
+        var request = URLRequest(url: URL(string: path)!)
+
         // Create the basic request
         request.httpMethod = route.method.rawValue
         request.addValue(Constants.Repository.contentType,

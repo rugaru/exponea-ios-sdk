@@ -84,11 +84,8 @@ extension MockRepository: TrackingRepository {
         
         // Prepare parameters and request.
         let params = TrackingParameters(customerIds: customerIds, properties: properties)
-        guard let request = router.prepareRequest(authorization: configuration.authorization,
-                                                  parameters: params) else {
-                                                    completion(.failure(RepositoryError.missingData("Request url is wrong.")))
-                                                    return
-        }
+        let request = router.prepareRequest(authorization: configuration.authorization,
+                                            parameters: params)
 
         /// Get the json content of file
         let data = retrieveDataFromFile(with: "get-recommendation", fileType: "json")
@@ -140,11 +137,8 @@ extension MockRepository: TrackingRepository {
         // Prepare parameters and request
         let params = TrackingParameters(customerIds: customerIds, properties: properties,
                                         timestamp: timestamp, eventType: eventType)
-        guard let request = router.prepareRequest(authorization: configuration.authorization,
-                                                  parameters: params) else {
-                                                    completion(.failure(RepositoryError.missingData("Request url is wrong.")))
-                                                    return
-        }
+        let request = router.prepareRequest(authorization: configuration.authorization,
+                                            parameters: params)
         
         let data = retrieveDataFromFile(with: "get-recommendation", fileType: "json")
         
@@ -173,11 +167,7 @@ extension MockRepository: FetchRepository {
                                     projectToken: configuration.fetchingToken,
                                     route: .customerRecommendation)
         let parameters = CustomerParameters(customer: customerIds, recommendation: recommendation)
-        guard let request = router.prepareRequest(authorization: configuration.authorization,
-                                                  parameters: parameters) else {
-                                                    completion(.failure(RepositoryError.missingData("Request url is wrong.")))
-                                                    return
-        }
+        let request = router.prepareRequest(authorization: configuration.authorization, parameters: parameters)
         
         let data = retrieveDataFromFile(with: "get-recommendation", fileType: "json")
         
@@ -203,11 +193,8 @@ extension MockRepository: FetchRepository {
                                     projectToken: configuration.fetchingToken,
                                     route: .customerAttributes)
         let parameters = CustomerParameters(customer: customerIds, attributes: attributes)
-        guard let request = router.prepareRequest(authorization: configuration.authorization,
-                                                  parameters: parameters) else {
-                                                    completion(.failure(RepositoryError.missingData("Request url is wrong.")))
-                                                    return
-        }
+        let request = router.prepareRequest(authorization: configuration.authorization,
+                                            parameters: parameters)
         
         let data = retrieveDataFromFile(with: "get-attributes", fileType: "json")
         
@@ -233,11 +220,8 @@ extension MockRepository: FetchRepository {
                                     projectToken: configuration.fetchingToken,
                                     route: .customerEvents)
         let parameters = CustomerParameters(customer: customerIds, events: events)
-        guard let request = router.prepareRequest(authorization: configuration.authorization,
-                                                  parameters: parameters) else {
-                                                    completion(.failure(RepositoryError.missingData("Request url is wrong.")))
-                                                    return
-        }
+        let request = router.prepareRequest(authorization: configuration.authorization,
+                                            parameters: parameters)
         
         let data = retrieveDataFromFile(with: "get-events", fileType: "json")
         
@@ -262,10 +246,7 @@ extension MockRepository: FetchRepository {
         let router = RequestFactory(baseUrl: configuration.baseUrl,
                                     projectToken: configuration.fetchingToken,
                                     route: .banners)
-        guard let request = router.prepareRequest(authorization: configuration.authorization) else {
-                                                    completion(.failure(RepositoryError.missingData("Request url is wrong.")))
-                                                    return
-        }
+        let request = router.prepareRequest(authorization: configuration.authorization)
         
         let data = retrieveDataFromFile(with: "get-banner", fileType: "json")
         
@@ -290,12 +271,9 @@ extension MockRepository: FetchRepository {
         let router = RequestFactory(baseUrl: configuration.baseUrl,
                                     projectToken: configuration.fetchingToken,
                                     route: .personalization)
-        guard let request = router.prepareRequest(authorization: configuration.authorization,
+        let request = router.prepareRequest(authorization: configuration.authorization,
                                             parameters: request,
-                                            customerIds: customerIds) else {
-                                                completion(.failure(RepositoryError.missingData("Request url is wrong.")))
-                                                return
-        }
+                                            customerIds: customerIds)
         
         let data = retrieveDataFromFile(with: "get-personalization", fileType: "json")
         
@@ -324,7 +302,7 @@ extension MockRepository: FetchRepository {
         let data = retrieveDataFromFile(with: "get-consents", fileType: "json")
 
         /// Prepare the stub response.
-        guard let stubResponse = HTTPURLResponse(url: request!.url!, statusCode: 200,
+        guard let stubResponse = HTTPURLResponse(url: request.url!, statusCode: 200,
                                                  httpVersion: nil, headerFields: nil) else {
             fatalError("It was not possible to mock the HTTP response.")
         }
@@ -337,7 +315,7 @@ extension MockRepository: FetchRepository {
         }
 
         session
-            .dataTask(with: request!, completionHandler: router.handler(with: completion))
+            .dataTask(with: request, completionHandler: router.handler(with: completion))
             .resume()
     }
 }
