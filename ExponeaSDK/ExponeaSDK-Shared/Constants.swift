@@ -32,6 +32,7 @@ enum Constants {
         static let autoSessionTrack = "automaticSessionTrack"
         static let appVersion = "CFBundleShortVersionString"
         static let baseUrl = "exponeaBaseURL"
+        static let sessionKey = "sessionKey"
     }
 
     /// SDK Info
@@ -50,6 +51,7 @@ enum Constants {
         static let payment = "payment"
         static let pushOpen = "campaign"
         static let pushDelivered = "campaign"
+        static let campaignClick = "campaign_click"
     }
 
     /// Error messages

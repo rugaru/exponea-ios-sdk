@@ -38,6 +38,10 @@
 		B42DA69022B0594D00BBA225 /* FetchConsentsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42DA68F22B0594D00BBA225 /* FetchConsentsSpec.swift */; };
 		B42DA69222B05A0100BBA225 /* get-consents.json in Resources */ = {isa = PBXBuildFile; fileRef = B42DA69122B05A0100BBA225 /* get-consents.json */; };
 		B4AF83BB22C6108200061350 /* String+URLValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AF83BA22C6108200061350 /* String+URLValidation.swift */; };
+		4C169E3122B6524C00C425DA /* TrackUniversalLinkSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C169E3022B6524C00C425DA /* TrackUniversalLinkSpec.swift */; };
+		4C588F8722AAAB3400916EE4 /* CampaignData+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C588F8622AAAB3300916EE4 /* CampaignData+Properties.swift */; };
+		4C6BD13622ABA743004487A8 /* CampaignData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6BD13522ABA743004487A8 /* CampaignData.swift */; };
+		4CA851EA22C14ACF0066AFD8 /* get-universallink.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CA851E922C14ACF0066AFD8 /* get-universallink.json */; };
 		C01E19EA20C02A4D00DF64F9 /* MultipleErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01E19E920C02A4D00DF64F9 /* MultipleErrorResponse.swift */; };
 		C02252C920B5F5FC00FDB7E3 /* JSONConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02252C820B5F5FC00FDB7E3 /* JSONConvertible.swift */; };
 		C028C3A22110980600B03ED4 /* JSONValueSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C028C3A12110980600B03ED4 /* JSONValueSpec.swift */; };
@@ -289,6 +293,10 @@
 		050961052322552300D59C01 /* MockLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockLogger.swift; sourceTree = "<group>"; };
 		080033AD83490110B7A029BD /* Pods_ExponeaSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExponeaSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E725E3214AA7A900B552B8 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		4C169E3022B6524C00C425DA /* TrackUniversalLinkSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackUniversalLinkSpec.swift; sourceTree = "<group>"; };
+		4C588F8622AAAB3300916EE4 /* CampaignData+Properties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CampaignData+Properties.swift"; sourceTree = "<group>"; };
+		4C6BD13522ABA743004487A8 /* CampaignData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignData.swift; sourceTree = "<group>"; };
+		4CA851E922C14ACF0066AFD8 /* get-universallink.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "get-universallink.json"; sourceTree = "<group>"; };
 		7F633CE783D735A862037D41 /* Pods-ExponeaSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExponeaSDKTests.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B40E9F5C22FAD25A0085B8A1 /* TokenTrackFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenTrackFrequency.swift; sourceTree = "<group>"; };
 		B40E9F5E22FAD58E0085B8A1 /* DatabaseModel v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DatabaseModel v4.xcdatamodel"; sourceTree = "<group>"; };
@@ -615,6 +623,7 @@
 				C0F7A59C21AE921300BA392F /* NotificationData.swift */,
 				C02C562821C9B71D0087A990 /* ExponeaNotificationAction.swift */,
 				C03B23D721AAFDBB00360EE6 /* ExponeaNotificationActionType.swift */,
+				4C6BD13522ABA743004487A8 /* CampaignData.swift */,
 			);
 			path = "ExponeaSDK-Shared";
 			sourceTree = "<group>";
@@ -959,6 +968,7 @@
 				F04BEAA42112412000591950 /* get-personalization.json */,
 				F04BEAA62112413C00591950 /* get-attributes.json */,
 				B42DA69122B05A0100BBA225 /* get-consents.json */,
+				4CA851E922C14ACF0066AFD8 /* get-universallink.json */,
 			);
 			path = json;
 			sourceTree = "<group>";
@@ -1050,6 +1060,7 @@
 				C0F2407320BDA42600CAF7CE /* ExportFormat.swift */,
 				C09C33CA221C097100715603 /* NotificationData+Properties.swift */,
 				B40E9F5C22FAD25A0085B8A1 /* TokenTrackFrequency.swift */,
+				4C588F8622AAAB3300916EE4 /* CampaignData+Properties.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1057,6 +1068,7 @@
 		F0CA58F7207F783E00C89A7F /* Tracking */ = {
 			isa = PBXGroup;
 			children = (
+				4C169E3022B6524C00C425DA /* TrackUniversalLinkSpec.swift */,
 				F03943A32080946E00FE7759 /* TrackEventSpec.swift */,
 				F067440C208642AC003C0293 /* TrackCustomerSpec.swift */,
 				F03E4B8620848E970051ED80 /* TrackSessionSpec.swift */,
@@ -1292,6 +1304,9 @@
 							com.apple.Push = {
 								enabled = 1;
 							};
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
 						};
 					};
 					F021E858206CF10200788ABC = {
@@ -1302,7 +1317,7 @@
 					F021E861206CF10200788ABC = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 0930;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -1378,6 +1393,7 @@
 				01764BC62087775800D0D673 /* config_valid.plist in Resources */,
 				F04BEAA12111EA8700591950 /* get-events.json in Resources */,
 				F04BEAA32111F85900591950 /* get-banner.json in Resources */,
+				4CA851EA22C14ACF0066AFD8 /* get-universallink.json in Resources */,
 				01764BC82087794000D0D673 /* config_valid2.plist in Resources */,
 				B42DA69222B05A0100BBA225 /* get-consents.json in Resources */,
 				F04BEAA52112412000591950 /* get-personalization.json in Resources */,
@@ -1412,7 +1428,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests-frameworks.sh",
+				"${SRCROOT}/../Pods/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Mockingjay/Mockingjay.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
@@ -1427,7 +1443,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-ExponeaSDKTests/Pods-ExponeaSDKTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1496,6 +1512,7 @@
 				C07E421420CA8C1B00920809 /* BannerFrequency.swift in Sources */,
 				C084D0ED2181D7BE005C0CA8 /* NSManagedObject+Convenience.swift in Sources */,
 				F0E757EE207D025300FE8C21 /* Exponea.swift in Sources */,
+				4C588F8722AAAB3400916EE4 /* CampaignData+Properties.swift in Sources */,
 				C0A6DEAE20EAC32700C5F744 /* DatabaseManager+DataType.swift in Sources */,
 				F029BF25208A08F800342498 /* Result.swift in Sources */,
 				019F1AC52087666900368FB1 /* DataType.swift in Sources */,
@@ -1540,6 +1557,7 @@
 				C0329E5F20F76EB00051F5DF /* URLRequest+Debug.swift in Sources */,
 				C0EB5D8C20B70D5000F1031F /* Swizzler.swift in Sources */,
 				C0D9B07B20A3B2410066FB1E /* TrackingManagerError.swift in Sources */,
+				4C6BD13622ABA743004487A8 /* CampaignData.swift in Sources */,
 				C0329E6120F76EBF0051F5DF /* URLResponse+Debug.swift in Sources */,
 				F029BF29208A099500342498 /* Routes.swift in Sources */,
 				C0D9B08120A3C0D50066FB1E /* Authorization.swift in Sources */,
@@ -1587,6 +1605,7 @@
 				F03943A42080946E00FE7759 /* TrackEventSpec.swift in Sources */,
 				F0BE60FB21106A7A0082ABD8 /* AttributesListDescriptionSpec.swift in Sources */,
 				F0BE60FD21106FB40082ABD8 /* CustomerExportRequestSpec.swift in Sources */,
+				4C169E3122B6524C00C425DA /* TrackUniversalLinkSpec.swift in Sources */,
 				F06744072085E983003C0293 /* StubEntities.swift in Sources */,
 				C09A6497212D83E600DCAC06 /* DatabaseManagerSpec.swift in Sources */,
 				F0E757F3207D02F100FE8C21 /* ExponeaSpec.swift in Sources */,
@@ -1690,13 +1709,14 @@
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_TEAM = 7C8ZHMS76Y;
 				INFOPLIST_FILE = ExampleNotificationContent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 2.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Exponea.ExponeaSDK-Example.ExampleNotificationContent";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cp.test.app.ExampleNotificationContent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Clickpark test NotificationContent";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1712,12 +1732,13 @@
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_TEAM = 7C8ZHMS76Y;
 				INFOPLIST_FILE = ExampleNotificationContent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 2.2.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Exponea.ExponeaSDK-Example.ExampleNotificationContent";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cp.test.app.ExampleNotificationContent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Clickpark test NotificationContent";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1739,8 +1760,9 @@
 				MARKETING_VERSION = 2.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Exponea.ExponeaSDK-Example.ExampleNotificationService";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cp.test.app.ExampleNotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Clickpark test NotificationService";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1761,8 +1783,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 2.2.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Exponea.ExponeaSDK-Example.ExampleNotificationService";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cp.test.app.ExampleNotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Clickpark test NotificationService";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1775,10 +1798,10 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 38Q36WPJHG;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1791,6 +1814,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.exponea.ExponeaSDKNotifications;
 				PRODUCT_NAME = ExponeaSDKNotifications;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1805,7 +1829,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1819,6 +1843,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.exponea.ExponeaSDKNotifications;
 				PRODUCT_NAME = ExponeaSDKNotifications;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2048,12 +2073,13 @@
 			baseConfigurationReference = 7F633CE783D735A862037D41 /* Pods-ExponeaSDKTests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = HW27H6H98R;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 38Q36WPJHG;
 				INFOPLIST_FILE = "ExponeaSDKTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.exponea.ExponeaSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2064,12 +2090,13 @@
 			baseConfigurationReference = B4FE42FEB4796BF54B37662B /* Pods-ExponeaSDKTests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = HW27H6H98R;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 38Q36WPJHG;
 				INFOPLIST_FILE = "ExponeaSDKTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.exponea.ExponeaSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

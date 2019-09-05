@@ -31,6 +31,8 @@ public struct RequestFactory {
         case .consents: return baseUrl + "/data/v2/projects/\(projectToken)/consent/categories"
         case .personalization:
             return baseUrl + "/data/v2/projects/\(projectToken)/customers/personalisation/show-banners"
+        case .campaignClick:
+            return baseUrl + "/track/v2/projects/\(projectToken)/campaigns/clicks"
         }
     }
 }
@@ -38,8 +40,12 @@ public struct RequestFactory {
 extension RequestFactory {
     func prepareRequest(authorization: Authorization,
                         parameters: RequestParametersType? = nil,
-                        customerIds: [String: JSONValue]? = nil) -> URLRequest {
-        var request = URLRequest(url: URL(string: path)!)
+                        customerIds: [String: JSONValue]? = nil) -> URLRequest? {
+        guard let urlPath = URL(string: path) else {
+            Exponea.logger.log(.verbose, message: "Dropping request \(path) - wrong URL")
+            return nil
+        }
+        var request = URLRequest(url: urlPath)
         
         // Create the basic request
         request.httpMethod = route.method.rawValue

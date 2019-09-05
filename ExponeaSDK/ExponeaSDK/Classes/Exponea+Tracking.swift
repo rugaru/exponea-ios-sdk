@@ -19,6 +19,20 @@ extension Exponea {
         }
     }
     
+    public func trackCampaignClick(url: URL, timestamp: Double?) {
+        Exponea.logger.log(.verbose, message: "Link Open event registred for path : \(url.description)")
+        executeWithDependencies { dependencies in
+            guard dependencies.configuration.authorization != Authorization.none else {
+                throw ExponeaError.authorizationInsufficient("token, basic")
+            }
+            // Create initial data
+            let data = CampaignData(url: url)
+            // Do the actual tracking
+            try dependencies.trackingManager.track(.campaignClick, with: [data.campaignData])
+            try dependencies.trackingManager.updateEvent(Constants.EventTypes.sessionStart, with: data.utmData)
+        }
+    }
+
     /// Adds new events to a customer. All events will be stored into coredata
     /// until it will be flushed (send to api).
     ///

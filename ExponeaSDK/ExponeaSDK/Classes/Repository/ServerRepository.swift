@@ -53,13 +53,14 @@ extension ServerRepository: TrackingRepository {
         
         // Prepare parameters and request
         let params = TrackingParameters(customerIds: customerIds, properties: properties)
-        let request = router.prepareRequest(authorization: configuration.authorization,
-                                            parameters: params)
+        if let request = router.prepareRequest(authorization: configuration.authorization,
+                                               parameters: params) {
         
         // Run the data task
         session
             .dataTask(with: request, completionHandler: router.handler(with: completion))
             .resume()
+        }
     }
     
     /// Add new events into a customer
@@ -95,18 +96,18 @@ extension ServerRepository: TrackingRepository {
         // Setup router
         let router = RequestFactory(baseUrl: configuration.baseUrl,
                                     projectToken: projectToken,
-                                    route: .customEvent)
-        
+                                    route: eventType == Constants.EventTypes.campaignClick ? .campaignClick : .customEvent)
         // Prepare parameters and request
         let params = TrackingParameters(customerIds: customerIds, properties: properties,
                                         timestamp: timestamp, eventType: eventType)
-        let request = router.prepareRequest(authorization: configuration.authorization,
-                                            parameters: params)
+        if let request = router.prepareRequest(authorization: configuration.authorization,
+                                               parameters: params) {
         
         // Run the data task
         session
             .dataTask(with: request, completionHandler: router.handler(with: completion))
             .resume()
+        }
     }
 }
 
@@ -123,11 +124,13 @@ extension ServerRepository: RepositoryType {
                                     projectToken: configuration.fetchingToken,
                                     route: .customerRecommendation)
         let parameters = CustomerParameters(customer: customerIds, recommendation: recommendation)
-        let request = router.prepareRequest(authorization: configuration.authorization, parameters: parameters)
+        if let request = router.prepareRequest(authorization: configuration.authorization, parameters: parameters) {
         
         session
-            .dataTask(with: request, completionHandler: router.handler(with: completion))
+            .dataTask(with: request,
+                      completionHandler: router.handler(with: completion))
             .resume()
+        }
     }
     
     /// Fetch multiple customer attributes at once
@@ -142,12 +145,14 @@ extension ServerRepository: RepositoryType {
                                     projectToken: configuration.fetchingToken,
                                     route: .customerAttributes)
         let parameters = CustomerParameters(customer: customerIds, attributes: attributes)
-        let request = router.prepareRequest(authorization: configuration.authorization,
-                                            parameters: parameters)
+        if let request = router.prepareRequest(authorization: configuration.authorization,
+                                               parameters: parameters) {
 
         session
-            .dataTask(with: request, completionHandler: router.handler(with: completion))
+            .dataTask(with: request,
+                      completionHandler: router.handler(with: completion))
             .resume()
+        }
     }
     
     /// Fetch customer events by it's type
@@ -163,11 +168,13 @@ extension ServerRepository: RepositoryType {
                                     projectToken: configuration.fetchingToken,
                                     route: .customerEvents)
         let parameters = CustomerParameters(customer: customerIds, events: events)
-        let request = router.prepareRequest(authorization: configuration.authorization,
-                                            parameters: parameters)
+        if let request = router.prepareRequest(authorization: configuration.authorization,
+                                               parameters: parameters) {
         session
-            .dataTask(with: request, completionHandler: router.handler(with: completion))
+            .dataTask(with: request,
+                      completionHandler: router.handler(with: completion))
             .resume()
+        }
     }
     
     /// Fetch all available banners.
@@ -178,10 +185,12 @@ extension ServerRepository: RepositoryType {
         let router = RequestFactory(baseUrl: configuration.baseUrl,
                                     projectToken: configuration.fetchingToken,
                                     route: .banners)
-        let request = router.prepareRequest(authorization: configuration.authorization)
+        if let request = router.prepareRequest(authorization: configuration.authorization) {
         session
-            .dataTask(with: request, completionHandler: router.handler(with: completion))
+            .dataTask(with: request,
+                completionHandler: router.handler(with: completion))
             .resume()
+    }
     }
     
     /// Fetch personalization (all banners) for current customer.
@@ -196,12 +205,14 @@ extension ServerRepository: RepositoryType {
         let router = RequestFactory(baseUrl: configuration.baseUrl,
                                     projectToken: configuration.fetchingToken,
                                     route: .personalization)
-        let request = router.prepareRequest(authorization: configuration.authorization,
+        if let request = router.prepareRequest(authorization: configuration.authorization,
                                             parameters: request,
-                                            customerIds: customerIds)
+                                            customerIds: customerIds) {
         session
-            .dataTask(with: request, completionHandler: router.handler(with: completion))
+            .dataTask(with: request,
+                      completionHandler: router.handler(with: completion))
             .resume()
+        }
     }
 
     /// Fetch the list of your existing consent categories.
@@ -212,10 +223,11 @@ extension ServerRepository: RepositoryType {
         let router = RequestFactory(baseUrl: configuration.baseUrl,
                                     projectToken: configuration.fetchingToken,
                                     route: .consents)
-        let request = router.prepareRequest(authorization: configuration.authorization)
+        if let request = router.prepareRequest(authorization: configuration.authorization) {
         session
             .dataTask(with: request, completionHandler: router.handler(with: completion))
             .resume()
+        }
     }
 }
 

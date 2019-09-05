@@ -128,7 +128,7 @@ open class TrackingManager {
         
         // Always track when we become active, enter background or terminate (used for both sessions and data flushing)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationDidBecomeActive),
+                                               selector: #selector(applicationDidBecomeActive(_:)),
                                                name: UIApplication.didBecomeActiveNotification,
                                                object: nil)
         
@@ -167,7 +167,15 @@ open class TrackingManager {
 // MARK: -
 
 extension TrackingManager: TrackingManagerType {
-    
+    open func updateEvent(_ type: String, with data: DataType) throws {
+        if type == Constants.EventTypes.sessionStart {
+            if !canUpdateSession {
+                try? triggerSessionStart()
+            }
+        }
+        try database.updateEvent(type, with: data)
+    }
+
     open func track(_ type: EventType, with data: [DataType]?) throws {
         /// Get token mapping or fail if no token provided.
         let tokens = repository.configuration.tokens(for: type)
@@ -175,7 +183,7 @@ extension TrackingManager: TrackingManagerType {
             throw TrackingManagerError.unknownError("No project tokens provided.")
         }
         
-        Exponea.logger.log(.verbose, message: "Tracking event of type: \(type).")
+        Exponea.logger.log(.verbose, message: "Tracking event of type: \(type) with params \(data)")
         
         /// For each project token we have, track the data.
         for projectToken in tokens {
@@ -191,12 +199,13 @@ extension TrackingManager: TrackingManagerType {
             case .registerPushToken: try trackPushToken(with: payload)
             case .pushOpened: try trackPushOpened(with: payload)
             case .pushDelivered: try trackPushDelivered(with: payload)
+            case .campaignClick: try trackCampaignClick(with: payload)
             }
         }
         
         // If we have immediate flushing mode, flush after tracking
         if case .immediate = flushingMode {
-            flushData()
+            flushDataWith(delay: 10.0)
         }
     }
 
@@ -212,6 +221,10 @@ extension TrackingManager: TrackingManagerType {
         try database.trackEvent(with: data)
     }
     
+    open func trackCampaignClick(with data: [DataType]) throws {
+        try database.trackEvent(with: data + [.eventType(Constants.EventTypes.campaignClick)])
+    }
+
     open func trackPayment(with data: [DataType]) throws {
         try database.trackEvent(with: data + [.eventType(Constants.EventTypes.payment)])
     }
@@ -267,6 +280,16 @@ extension TrackingManager {
         }
     }
     
+    var canUpdateSession: Bool {
+        if sessionStartTime != 0 &&
+            sessionEndTime == 0
+            && (Date().timeIntervalSince1970 - sessionStartTime) < 3.0
+        {
+            return true
+        }
+        return false
+    }
+
     internal func triggerInitialSession() throws {
         // If we have a previously started session and a last session background time,
         // but no end time then we can assume that the app was terminated and we can use
@@ -290,7 +313,8 @@ extension TrackingManager {
         if shouldTrackCurrentSession {
             Exponea.logger.log(.verbose, message: "We're past session timeout, first tracking previous session end.")
             try triggerSessionEnd()
-        } else if sessionStartTime != 0 {
+        }
+        else if sessionStartTime != 0 {
             Exponea.logger.log(.verbose, message: "Continuing current session as we're within session timeout.")
             return
         }
@@ -298,9 +322,13 @@ extension TrackingManager {
         // Start the session with current date
         sessionStartTime = Date().timeIntervalSince1970
         
+        let data: [DataType] = [
+            .properties(device.properties),
+            .timestamp(sessionStartTime)
+        ]
+
         // Track session start
-        try track(.sessionStart, with: [.properties(device.properties),
-                                        .timestamp(sessionStartTime)])
+        try track(.sessionStart, with: data)
         
         Exponea.logger.log(.verbose, message: Constants.SuccessMessages.sessionStart)
     }
@@ -321,7 +349,7 @@ extension TrackingManager {
         // Calculate the duration of the session and add to properties.
         let duration = sessionEndTime - sessionStartTime
         properties["duration"] = .double(duration)
-        
+
         // Track session end
         try track(.sessionEnd, with: [.properties(properties),
                                       .timestamp(sessionEndTime)])
@@ -329,11 +357,11 @@ extension TrackingManager {
         // Reset session times
         sessionStartTime = 0
         sessionEndTime = 0
-            
+
         Exponea.logger.log(.verbose, message: Constants.SuccessMessages.sessionEnd)
     }
-    
-    @objc internal func applicationDidBecomeActive() {
+
+    @objc internal func applicationDidBecomeActive(_ notification: Notification) {
         // Cancel background task if we have any
         if let item = backgroundWorkItem {
             item.cancel()
@@ -460,6 +488,14 @@ extension TrackingManager {
 
 extension TrackingManager {
     
+    private func flushDataWith(delay: Double) {
+        // EXPI-7
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let `self` = self else { return }
+            self.flushData()
+        }
+    }
+    
     @objc func flushData() {
         flushData(completion: nil)
     }
@@ -509,6 +545,7 @@ extension TrackingManager {
                     completion?()
                 }
             })
+
             flushEventTracking(Array(events), completion: {
                 eventsDone = true
                 if eventsDone && customersDone {
@@ -674,7 +711,7 @@ extension TrackingManager {
         switch flushingMode {
         case .immediate:
             // Immediately flush any data we might have
-            flushData()
+            flushDataWith(delay: 10.0)
             
         case .periodic(let interval):
             // Schedule a timer for the specified interval

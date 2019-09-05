@@ -29,6 +29,7 @@ protocol TrackingRepository {
     func trackEvent(with data: [DataType],
                     for customerIds: [String: JSONValue],
                     completion: @escaping ((EmptyResult<RepositoryError>) -> Void))
+
 }
 
 protocol FetchRepository {

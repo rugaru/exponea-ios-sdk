@@ -41,6 +41,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+            let incomingURL = userActivity.webpageURL
+            else { return false }
+        Exponea.shared.trackCampaignClick(url: incomingURL, timestamp: nil)
+        return true
+    }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         if let components = URLComponents(url: url, resolvingAgainstBaseURL: false), components.scheme == "exponea" {

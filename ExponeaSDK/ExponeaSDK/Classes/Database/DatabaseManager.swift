@@ -150,7 +150,26 @@ extension DatabaseManager {
 }
 
 extension DatabaseManager: DatabaseManagerType {
+    public func updateEvent(_ type: String, with data: DataType) throws {
+        try context.performAndWait {
+            let event = try getLastEventOf(type: type)
+            if case let .properties(properties) = data, let event = event {
+                processProperties(properties, into: event)
+                Exponea.logger.log(.verbose, message: "going to modify event with id \(event.objectID))")
+            }
+            try context.save()
+        }
+    }
     
+    private func getLastEventOf(type: String) throws -> TrackEvent? {
+        let fetchRequest = NSFetchRequest<TrackEvent>(entityName: "TrackEvent")
+        let sort = NSSortDescriptor(key: #keyPath(TrackEvent.timestamp), ascending: false)
+        fetchRequest.predicate = NSPredicate(format: "eventType = %@", type)
+        fetchRequest.sortDescriptors = [sort]
+        let events = try context.fetch(fetchRequest)
+        return events.first
+    }
+
     /// Add any type of event into coredata.
     ///
     /// - Parameter data: See `DataType` for more information. Types specified below are required at minimum.
@@ -177,7 +196,7 @@ extension DatabaseManager: DatabaseManagerType {
                     
                 case .timestamp(let time):
                     trackEvent.timestamp = time ?? trackEvent.timestamp
-                    
+
                 case .properties(let properties):
                     // Add the event properties to the events entity
                     processProperties(properties, into: trackEvent)
@@ -186,8 +205,8 @@ extension DatabaseManager: DatabaseManagerType {
                     break
                 }
             }
-            
-            Exponea.logger.log(.verbose, message: "Adding track event to database: \(trackEvent.objectID)")
+
+            Exponea.logger.log(.verbose, message: "Adding track event \(trackEvent.eventType) to database: \(trackEvent.objectID)")
             
             // Insert the object into the database
             context.insert(trackEvent)
