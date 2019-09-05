@@ -498,7 +498,6 @@ extension TrackingManager {
 extension TrackingManager {
     
     private func flushDataWith(delay: Double) {
-        // EXPI-7
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
             guard let `self` = self else { return }
             self.flushData()

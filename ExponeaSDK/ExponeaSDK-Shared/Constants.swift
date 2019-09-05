@@ -32,7 +32,6 @@ enum Constants {
         static let autoSessionTrack = "automaticSessionTrack"
         static let appVersion = "CFBundleShortVersionString"
         static let baseUrl = "exponeaBaseURL"
-        static let sessionKey = "sessionKey"
     }
 
     /// SDK Info
