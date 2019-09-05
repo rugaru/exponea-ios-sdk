@@ -180,9 +180,20 @@ extension TrackingManager: TrackingManagerType {
             return true
         }
     }
-
-    func updateEvent(_ type: String, with data: DataType) throws {
-        try database.updateEvent(type, with: data)
+    // Updates last logged event of given type with data
+    // Event may be logged multiple times - for every project token
+    func updateLastEvent(ofType type: String, with data: DataType) throws {
+        var events = try database.fetchTrackEvent()
+            .filter({ $0.eventType == type })
+            .sorted(by: {$0.timestamp < $1.timestamp})
+        var projectTokens: Set<String> = []
+        while (!events.isEmpty
+            && events.last!.projectToken != nil
+            && !projectTokens.contains(events.last!.projectToken!)) {
+            let event = events.removeLast()
+            projectTokens.insert(event.projectToken!)
+            try database.updateEvent(withId: event.objectID, withData: data)
+        }
     }
 
     open func track(_ type: EventType, with data: [DataType]?) throws {
@@ -197,7 +208,7 @@ extension TrackingManager: TrackingManagerType {
         /// For each project token we have, track the data.
         for projectToken in tokens {
             let payload: [DataType] = [.projectToken(projectToken)] + (data ?? [])
-            
+
             switch type {
             case .install: try trackInstall(with: payload)
             case .sessionStart: try trackStartSession(with: payload)

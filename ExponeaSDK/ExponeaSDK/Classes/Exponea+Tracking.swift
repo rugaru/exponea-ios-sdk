@@ -70,7 +70,7 @@ extension Exponea {
             // Do the actual tracking
             try dependencies.trackingManager.track(.campaignClick, with: [data.campaignDataProperties])
             if dependencies.trackingManager.canUpdateEvent(forType: .campaignClick) {
-                try dependencies.trackingManager.updateEvent(Constants.EventTypes.sessionStart, with: data.utmData)
+                try dependencies.trackingManager.updateLastEvent(ofType: Constants.EventTypes.sessionStart, with: data.utmData)
             }
         }
     }

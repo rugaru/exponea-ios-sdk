@@ -57,7 +57,7 @@ class TrackUniversalLinkSpec: QuickSpec {
                 expect(objects.count).to(equal(1))
 
                 let campaignData = CampaignData(url: mockData.campaignUrl!)
-                expect { try db.updateEvent("session_start", with: campaignData.utmData)}.toNot(raiseException())
+                expect { try db.updateEvent(withId: objects.first!.objectID, withData: campaignData.utmData)}.toNot(raiseException())
                 expect { objects = try db.fetchTrackEvent() }.toNot(raiseException())
                 expect(objects.count).to(equal(1))
 

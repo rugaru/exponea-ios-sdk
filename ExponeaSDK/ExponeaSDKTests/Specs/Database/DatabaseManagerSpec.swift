@@ -22,7 +22,9 @@ class DatabaseManagerSpec: QuickSpec {
         var db: DatabaseManager!
         
         context("A database manager") {
-            db = try! DatabaseManager(persistentStoreDescriptions: [inMemoryDescription])
+            beforeEach {
+                db = try! DatabaseManager(persistentStoreDescriptions: [inMemoryDescription])
+            }
             
             describe("when properly instantiated", {
                 let customerData: [DataType] = [
@@ -87,6 +89,69 @@ class DatabaseManagerSpec: QuickSpec {
                     expect { try db.delete(object) }.toNot(raiseException())
                     expect { objects = try db.fetchTrackEvent() }.toNot(raiseException())
                     expect(objects).to(beEmpty())
+                })
+
+                describe("update", {
+                    func hasStringProperty(event: TrackEvent, withKey key: String, withValue value: String) -> Bool {
+                        return event.properties?.objects(passingTest: {(object, _) in
+                            let item = object as! KeyValueItem
+                            return item.key == key && item.value as! String == value
+                        }).count == 1
+                    }
+
+                    func createSampleEvent() -> TrackEvent {
+                        var objects: [TrackEvent] = []
+                        expect { try db.trackEvent(with: eventData) }.toNot(raiseException())
+                        expect { objects = try db.fetchTrackEvent() }.toNot(raiseException())
+                        expect(objects.count).to(equal(1))
+                        
+                        return objects[0]
+                    }
+
+                    func fetchSampleEvent() -> TrackEvent {
+                        var objects: [TrackEvent] = []
+                        expect { objects = try db.fetchTrackEvent() }.toNot(raiseException())
+                        expect(objects.count).to(equal(1))
+                        return objects[0]
+                    }
+
+                    it("should add new property", closure: {
+                        let sampleEvent = createSampleEvent()
+                        let updateData = DataType.properties(["newcustomprop": .string("newcustomval")])
+                        expect { try db.updateEvent(withId: sampleEvent.objectID, withData: updateData) }.toNot(raiseException())
+                        let updatedEvent = fetchSampleEvent()
+                        expect { hasStringProperty(event: updatedEvent,
+                                                   withKey: "customprop",
+                                                   withValue: "customval") }.to(beTrue())
+                        expect { hasStringProperty(event: updatedEvent,
+                                                   withKey: "newcustomprop",
+                                                   withValue: "newcustomval") }.to(beTrue())
+                    })
+
+                    it("should update existing property", closure: {
+                        let sampleEvent = createSampleEvent()
+                        let updateData = DataType.properties(["customprop": .string("newcustomval")])
+                        expect { try db.updateEvent(withId: sampleEvent.objectID, withData: updateData) }.toNot(raiseException())
+                        let updatedEvent = fetchSampleEvent()
+                        expect { hasStringProperty(event: updatedEvent,
+                                                   withKey: "customprop",
+                                                   withValue: "newcustomval") }.to(beTrue())
+                    })
+
+                    it("should throw updating an object if it was deleted", closure: {
+                        let sampleEvent = createSampleEvent()
+                        expect { try db.delete(sampleEvent) }.toNot(raiseException())
+                        let updateData = DataType.properties(["newcustomprop": .string("newcustomval")])
+                        expect { try db.updateEvent(withId: sampleEvent.objectID, withData: updateData) }
+                            .to(throwError(DatabaseManagerError.objectDoesNotExist))
+                    })
+
+                    it("should throw updating wrong object", closure: {
+                        let customer = db.customer
+                        let updateData = DataType.properties(["newcustomprop": .string("newcustomval")])
+                        expect { try db.updateEvent(withId: customer.objectID, withData: updateData) }
+                            .to(throwError(DatabaseManagerError.wrongObjectType))
+                    })
                 })
             })
             

@@ -11,7 +11,7 @@ import Mockingjay
 
 @testable import ExponeaSDK
 
-class MockRepository {
+class MockRepository: RepositoryType {
     
     /// Mock server setup.
     typealias DidReceiveDataHandler = (_ session: Foundation.URLSession, _ dataTask: URLSessionDataTask, _ data: Data) -> ()
@@ -50,7 +50,14 @@ class MockRepository {
         }
         return data
     }
-    
+
+    func cancelRequests() {
+        session.getAllTasks { (tasks) in
+            for task in tasks {
+                task.cancel()
+            }
+        }
+    }
 }
 
 extension MockRepository: TrackingRepository {

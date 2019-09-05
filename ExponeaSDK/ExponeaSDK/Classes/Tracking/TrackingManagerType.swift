@@ -29,10 +29,10 @@ protocol TrackingManagerType: class {
     /// - Throws: An error of type `TrackingManagerError`.
     func track(_ type: EventType, with data: [DataType]?) throws
 
-    /// Update an existing event
+    /// Updates last existing event for all project tokens
     /// - type: Type of event you want to update.
     /// - data: update data
-    func updateEvent(_ type: String, with data: DataType) throws
+    func updateLastEvent(ofType type: String, with data: DataType) throws
     
     func canUpdateEvent(forType type: EventType) -> Bool
     // MARK: - Session -

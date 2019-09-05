@@ -150,24 +150,21 @@ extension DatabaseManager {
 }
 
 extension DatabaseManager: DatabaseManagerType {
-    public func updateEvent(_ type: String, with data: DataType) throws {
+    public func updateEvent(withId id: NSManagedObjectID, withData data: DataType) throws {
         try context.performAndWait {
-            let event = try getLastEventOf(type: type)
-            if case let .properties(properties) = data, let event = event {
+            guard let object = try? context.existingObject(with: id) else {
+                throw DatabaseManagerError.objectDoesNotExist
+            }
+            guard object is TrackEvent else {
+                throw DatabaseManagerError.wrongObjectType
+            }
+            let event = object as! TrackEvent
+            if case let .properties(properties) = data {
                 processProperties(properties, into: event)
-                Exponea.logger.log(.verbose, message: "going to modify event with id \(event.objectID))")
+                Exponea.logger.log(.verbose, message: "going to modify event with id \(event.objectID)")
             }
             try context.save()
         }
-    }
-    
-    private func getLastEventOf(type: String) throws -> TrackEvent? {
-        let fetchRequest = NSFetchRequest<TrackEvent>(entityName: "TrackEvent")
-        let sort = NSSortDescriptor(key: #keyPath(TrackEvent.timestamp), ascending: false)
-        fetchRequest.predicate = NSPredicate(format: "eventType = %@", type)
-        fetchRequest.sortDescriptors = [sort]
-        let events = try context.fetch(fetchRequest)
-        return events.first
     }
 
     /// Add any type of event into coredata.
