@@ -30,7 +30,7 @@ final class MockExponea: Exponea {
             // Finally, configuring tracking manager
             self.trackingManager = TrackingManager(repository: repository,
                                                    database: database,
-                                                   userDefaults: userDefaults)
+                                                   userDefaults: MockUserDefaults())
         } catch {
             // Failing gracefully, if setup failed
             Exponea.logger.log(.error, message: """

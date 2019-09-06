@@ -34,7 +34,7 @@ protocol TrackingManagerType: class {
     /// - data: update data
     func updateLastEvent(ofType type: String, with data: DataType) throws
     
-    func canUpdateEvent(forType type: EventType) -> Bool
+    func hasPendingEvent(ofType type: String, withMaxAge age: Double) throws -> Bool
     // MARK: - Session -
     
     /// Starts a session and tracks the event.

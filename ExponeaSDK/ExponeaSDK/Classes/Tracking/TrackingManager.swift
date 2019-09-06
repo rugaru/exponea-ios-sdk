@@ -167,19 +167,12 @@ open class TrackingManager {
 // MARK: -
 
 extension TrackingManager: TrackingManagerType {
-    func canUpdateEvent(forType type: EventType) -> Bool {
-        switch type {
-        case .campaignClick:
-            // if session is not running, start it to be able to update session with utm params
-            if sessionStartTime == 0 {
-                try? triggerSessionStart()
-            }
-            // check session conditions for updating start event (used for track universal link)
-            return canUpdateSession
-        default:
-            return true
-        }
+    func hasPendingEvent(ofType type: String, withMaxAge maxAge: Double) throws -> Bool {
+        let events = try database.fetchTrackEvent()
+            .filter({ $0.eventType == type && $0.timestamp + maxAge >= Date().timeIntervalSince1970})
+        return !events.isEmpty
     }
+
     // Updates last logged event of given type with data
     // Event may be logged multiple times - for every project token
     func updateLastEvent(ofType type: String, with data: DataType) throws {
@@ -298,16 +291,6 @@ extension TrackingManager {
         set {
             userDefaults.set(newValue, forKey: Constants.Keys.sessionBackgrounded)
         }
-    }
-
-    var canUpdateSession: Bool {
-        if sessionStartTime != 0 &&
-            sessionEndTime == 0
-            && (Date().timeIntervalSince1970 - sessionStartTime) < Constants.Session.sessionUpdateThreshold
-        {
-            return true
-        }
-        return false
     }
 
     internal func triggerInitialSession() throws {
