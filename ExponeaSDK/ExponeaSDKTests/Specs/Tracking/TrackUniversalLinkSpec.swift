@@ -6,10 +6,10 @@
 //  Copyright © 2019 Exponea. All rights reserved.
 //
 
-import Foundation
-import Quick
-import Nimble
 import CoreData
+import Foundation
+import Nimble
+import Quick
 
 @testable import ExponeaSDK
 
@@ -27,11 +27,10 @@ class TrackUniversalLinkSpec: QuickSpec {
             context("Track universal link with mock repository") {
                 let data: [DataType] = [.projectToken(mockData.projectToken),
                                         .properties(mockData.campaignData),
-                                        .timestamp(nil)
-                ]
-                
+                                        .timestamp(nil)]
+
                 waitUntil(timeout: 3) { done in
-                    mockRepo.trackCampaignClick(with: data, for: mockData.customerIds) { (result) in
+                    mockRepo.trackCampaignClick(with: data, for: mockData.customerIds) { result in
                         it("Result error should be nil") {
                             expect(result.error).to(beNil())
                         }
@@ -44,28 +43,29 @@ class TrackUniversalLinkSpec: QuickSpec {
                 let sessionStart: [DataType] = [
                     .projectToken("mytoken"),
                     .properties(["customprop": .string("customval")]),
-                    .eventType("session_start")
+                    .eventType("session_start"),
                 ]
 
                 expect {
                     try db.trackEvent(with: sessionStart)
                     return nil
                 }.toNot(raiseException())
-                
+
                 var objects: [TrackEvent] = []
                 expect { objects = try db.fetchTrackEvent() }.toNot(raiseException())
                 expect(objects.count).to(equal(1))
 
                 let campaignData = CampaignData(url: mockData.campaignUrl!)
-                expect { try db.updateEvent(withId: objects.first!.objectID, withData: campaignData.utmData)}.toNot(raiseException())
+                expect {
+                    try db.updateEvent(withId: objects.first!.objectID, withData: campaignData.utmData)
+                }.toNot(raiseException())
                 expect { objects = try db.fetchTrackEvent() }.toNot(raiseException())
                 expect(objects.count).to(equal(1))
 
                 let props = objects.first?.properties as? Set<KeyValueItem>
                 let campaignProp = props?.first(where: { $0.key == "utm_campaign" })
                 expect(campaignProp?.value as? String).to(equal("mycampaign"))
-                }
-            )
+            })
             context("Track campaign click with immediate flushing within session update threshold", closure: {
                 let exponea = MockExponea()
                 Exponea.shared = exponea
@@ -89,7 +89,7 @@ class TrackUniversalLinkSpec: QuickSpec {
                 let exponea = MockExponea()
                 Exponea.shared = exponea
                 Exponea.shared.configure(plistName: "ExponeaConfig")
-                
+
                 exponea.flushingMode = .immediate
                 exponea.configuration?.sessionTimeout = 8.0
                 // just to be shure, that no session is running

@@ -333,8 +333,7 @@ extension TrackingManager {
         if shouldTrackCurrentSession {
             Exponea.logger.log(.verbose, message: "We're past session timeout, first tracking previous session end.")
             try triggerSessionEnd()
-        }
-        else if sessionStartTime != 0 {
+        } else if sessionStartTime != 0 {
             Exponea.logger.log(.verbose, message: "Continuing current session as we're within session timeout.")
             return
         }

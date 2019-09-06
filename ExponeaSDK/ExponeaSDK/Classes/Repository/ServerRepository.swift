@@ -142,11 +142,10 @@ extension ServerRepository: RepositoryType {
                                     route: .customerAttributes)
         let parameters = CustomerParameters(customer: customerIds, attributes: attributes)
         let request = router.prepareRequest(authorization: configuration.authorization,
-                                               parameters: parameters)
+                                            parameters: parameters)
 
         session
-            .dataTask(with: request,
-                      completionHandler: router.handler(with: completion))
+            .dataTask(with: request, completionHandler: router.handler(with: completion))
             .resume()
     }
     
@@ -180,8 +179,7 @@ extension ServerRepository: RepositoryType {
                                     route: .banners)
         let request = router.prepareRequest(authorization: configuration.authorization)
         session
-            .dataTask(with: request,
-                completionHandler: router.handler(with: completion))
+            .dataTask(with: request, completionHandler: router.handler(with: completion))
             .resume()
     }
     
