@@ -18,62 +18,6 @@ extension Exponea {
             Exponea.logger.log(.error, message: error.localizedDescription)
         }
     }
-    
-    internal func processCampaignData() {
-        let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
-        guard var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) as? [Data] else { return }
-        trackLastCampaignEvent(events.popLast())
-        processCampaignEvents(events)
-        // remove all stored events if processed
-        userDefaults?.removeObject(forKey: Constants.General.deliveredPushUserDefaultsKey)
-    }
-    
-    // last registered campaign click should be appended to session start event
-    private func trackLastCampaignEvent(_ lastEvent: Data?) {
-        if let lastEvent = lastEvent,
-            let campaignData = try? JSONDecoder().decode(CampaignData.self, from: lastEvent) {
-            trackCampaignClick(url: campaignData.url, timestamp: nil)
-        }
-    }
-    
-    // track remaining events
-    private func processCampaignEvents(_ events: [Data]) {
-        for event in events {
-            guard let campaignData = try? JSONDecoder().decode(CampaignData.self, from: event),
-                let campaignDataProperties = campaignData.campaignData as? [String: JSONConvertible] else { continue }
-            trackEvent(properties: campaignDataProperties, timestamp: campaignData.timestamp, eventType: Constants.EventTypes.campaignClick)
-        }
-    }
-
-    fileprivate func saveCampaignData(campaignData: CampaignData) {
-        let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
-        var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) ?? []
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(campaignData) {
-            events.append(encoded)
-        }
-        userDefaults?.set(events, forKey: Constants.General.savedCampaignClickEvent)
-    }
-    
-    public func trackCampaignClick(url: URL, timestamp: Double?) {
-        let data = CampaignData(url: url)
-        Exponea.logger.log(.verbose, message: "Link Open event registred for path : \(url.description)")
-        if !isConfigured {
-            saveCampaignData(campaignData: data)
-            return
-        }
-        executeWithDependencies { dependencies in
-            // Create initial data
-            guard dependencies.configuration.authorization != Authorization.none else {
-                throw ExponeaError.authorizationInsufficient("token")
-            }
-            // Do the actual tracking
-            try dependencies.trackingManager.track(.campaignClick, with: [data.campaignDataProperties])
-            if dependencies.trackingManager.canUpdateEvent(forType: .campaignClick) {
-                try dependencies.trackingManager.updateLastEvent(ofType: Constants.EventTypes.sessionStart, with: data.utmData)
-            }
-        }
-    }
 
     /// Adds new events to a customer. All events will be stored into coredata
     /// until it will be flushed (send to api).
@@ -241,6 +185,64 @@ extension Exponea {
                 throw ExponeaError.authorizationInsufficient("token, basic")
             }
             try dependencies.trackingManager.triggerSessionEnd()
+        }
+    }
+
+    // MARK: Campaign data
+
+    internal func processSavedCampaignData() {
+        let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
+        guard var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) as? [Data] else { return }
+        trackLastCampaignEvent(events.popLast())
+        trackOtherCampaignEvents(events)
+        // remove all stored events if processed
+        userDefaults?.removeObject(forKey: Constants.General.deliveredPushUserDefaultsKey)
+    }
+
+    // last registered campaign click should be appended to session start event
+    private func trackLastCampaignEvent(_ lastEvent: Data?) {
+        if let lastEvent = lastEvent,
+            let campaignData = try? JSONDecoder().decode(CampaignData.self, from: lastEvent) {
+            trackCampaignClick(url: campaignData.url, timestamp: nil)
+        }
+    }
+
+    // older events will not update session
+    private func trackOtherCampaignEvents(_ events: [Data]) {
+        for event in events {
+            guard let campaignData = try? JSONDecoder().decode(CampaignData.self, from: event),
+                let campaignDataProperties = campaignData.campaignData as? [String: JSONConvertible] else { continue }
+            trackEvent(properties: campaignDataProperties, timestamp: campaignData.timestamp, eventType: Constants.EventTypes.campaignClick)
+        }
+    }
+
+    fileprivate func saveCampaignData(campaignData: CampaignData) {
+        let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
+        var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) ?? []
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(campaignData) {
+            events.append(encoded)
+        }
+        userDefaults?.set(events, forKey: Constants.General.savedCampaignClickEvent)
+    }
+
+    public func trackCampaignClick(url: URL, timestamp: Double?) {
+        let data = CampaignData(url: url)
+        Exponea.logger.log(.verbose, message: "Link Open event registred for path : \(url.description)")
+        if !isConfigured {
+            saveCampaignData(campaignData: data)
+            return
+        }
+        executeWithDependencies { dependencies in
+            // Create initial data
+            guard dependencies.configuration.authorization != Authorization.none else {
+                throw ExponeaError.authorizationInsufficient("token")
+            }
+            // Do the actual tracking
+            try dependencies.trackingManager.track(.campaignClick, with: [data.campaignDataProperties])
+            if dependencies.trackingManager.canUpdateEvent(forType: .campaignClick) {
+                try dependencies.trackingManager.updateLastEvent(ofType: Constants.EventTypes.sessionStart, with: data.utmData)
+            }
         }
     }
     

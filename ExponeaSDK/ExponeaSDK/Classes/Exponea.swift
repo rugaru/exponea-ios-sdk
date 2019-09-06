@@ -132,7 +132,7 @@ public class Exponea: ExponeaType {
             self.trackingManager = TrackingManager(repository: repository,
                                                    database: database,
                                                    userDefaults: userDefaults)
-            processCampaignData()
+            processSavedCampaignData()
         } catch {
             // Failing gracefully, if setup failed
             Exponea.logger.log(.error, message: """
