@@ -240,9 +240,14 @@ extension Exponea {
             }
             // Do the actual tracking
             try dependencies.trackingManager.track(.campaignClick, with: [data.campaignDataProperties])
-            if try dependencies.trackingManager.hasPendingEvent(ofType: Constants.EventTypes.sessionStart,
-                                                            withMaxAge: Constants.Session.sessionUpdateThreshold) {
-                try dependencies.trackingManager.updateLastPendingEvent(ofType: Constants.EventTypes.sessionStart, with: data.utmData)
+            if (dependencies.configuration.automaticSessionTracking) {
+                // Campaign click should result in new session
+                try dependencies.trackingManager.triggerSessionStart()
+                // If the session was tracked before tracking campaign click, amend it
+                if try dependencies.trackingManager.hasPendingEvent(ofType: Constants.EventTypes.sessionStart,
+                                                                withMaxAge: Constants.Session.sessionUpdateThreshold) {
+                    try dependencies.trackingManager.updateLastPendingEvent(ofType: Constants.EventTypes.sessionStart, with: data.utmData)
+                }
             }
         }
     }
