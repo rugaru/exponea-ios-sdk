@@ -167,7 +167,7 @@ open class TrackingManager {
 // MARK: -
 
 extension TrackingManager: TrackingManagerType {
-    func hasPendingEvent(ofType type: String, withMaxAge maxAge: Double) throws -> Bool {
+    public func hasPendingEvent(ofType type: String, withMaxAge maxAge: Double) throws -> Bool {
         let events = try database.fetchTrackEvent()
             .filter({ $0.eventType == type && $0.timestamp + maxAge >= Date().timeIntervalSince1970})
         return !events.isEmpty
@@ -175,7 +175,7 @@ extension TrackingManager: TrackingManagerType {
 
     // Updates last logged event of given type with data
     // Event may be logged multiple times - for every project token
-    func updateLastEvent(ofType type: String, with data: DataType) throws {
+    public func updateLastPendingEvent(ofType type: String, with data: DataType) throws {
         var events = try database.fetchTrackEvent()
             .filter({ $0.eventType == type })
             .sorted(by: {$0.timestamp < $1.timestamp})

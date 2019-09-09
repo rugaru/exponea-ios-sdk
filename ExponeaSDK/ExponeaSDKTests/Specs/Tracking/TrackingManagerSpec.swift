@@ -31,7 +31,7 @@ class TrackingManagerSpec: QuickSpec {
                 it("should do nothing without events") {
                     let updateData = DataType.properties(["testkey": .string("testvalue")])
                     expect {
-                        try trackingManager.updateLastEvent(ofType: Constants.EventTypes.sessionStart,
+                        try trackingManager.updateLastPendingEvent(ofType: Constants.EventTypes.sessionStart,
                                                             with: updateData)
                     }.notTo(raiseException())
                 }
@@ -42,7 +42,7 @@ class TrackingManagerSpec: QuickSpec {
                         try trackingManager.track(EventType.sessionEnd, with: [])
                     }.notTo(raiseException())
                     expect {
-                        try trackingManager.updateLastEvent(ofType: Constants.EventTypes.sessionEnd,
+                        try trackingManager.updateLastPendingEvent(ofType: Constants.EventTypes.sessionEnd,
                                                             with: updateData)
                     }.notTo(raiseException())
                     let event = try! trackingManager.database.fetchTrackEvent().first!
@@ -67,7 +67,7 @@ class TrackingManagerSpec: QuickSpec {
                                                   with: [DataType.properties(["order": .string("3")])])
                     }.notTo(raiseException())
                     expect {
-                        try trackingManager.updateLastEvent(ofType: Constants.EventTypes.sessionEnd,
+                        try trackingManager.updateLastPendingEvent(ofType: Constants.EventTypes.sessionEnd,
                                                             with: updateData)
                     }.notTo(raiseException())
                     let events = try! trackingManager.database.fetchTrackEvent()
@@ -103,7 +103,7 @@ class TrackingManagerSpec: QuickSpec {
                                                   with: [DataType.properties(["order": .string("3")])])
                     }.notTo(raiseException())
                     expect {
-                        try trackingManager.updateLastEvent(ofType: Constants.EventTypes.sessionStart,
+                        try trackingManager.updateLastPendingEvent(ofType: Constants.EventTypes.sessionStart,
                                                             with: updateData)
                     }.notTo(raiseException())
                     let events = try! trackingManager.database.fetchTrackEvent()

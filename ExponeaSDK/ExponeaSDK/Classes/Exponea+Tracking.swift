@@ -216,7 +216,7 @@ extension Exponea {
         }
     }
 
-    fileprivate func saveCampaignData(campaignData: CampaignData) {
+    private func saveCampaignData(campaignData: CampaignData) {
         let userDefaults = UserDefaults(suiteName: Constants.EventTypes.campaignClick)
         var events = userDefaults?.array(forKey: Constants.General.savedCampaignClickEvent) ?? []
         let encoder = JSONEncoder()
@@ -242,7 +242,7 @@ extension Exponea {
             try dependencies.trackingManager.track(.campaignClick, with: [data.campaignDataProperties])
             if try dependencies.trackingManager.hasPendingEvent(ofType: Constants.EventTypes.sessionStart,
                                                             withMaxAge: Constants.Session.sessionUpdateThreshold) {
-                try dependencies.trackingManager.updateLastEvent(ofType: Constants.EventTypes.sessionStart, with: data.utmData)
+                try dependencies.trackingManager.updateLastPendingEvent(ofType: Constants.EventTypes.sessionStart, with: data.utmData)
             }
         }
     }
