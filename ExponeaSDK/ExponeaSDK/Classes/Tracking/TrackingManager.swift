@@ -128,7 +128,7 @@ open class TrackingManager {
         
         // Always track when we become active, enter background or terminate (used for both sessions and data flushing)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationDidBecomeActive(_:)),
+                                               selector: #selector(applicationDidBecomeActive),
                                                name: UIApplication.didBecomeActiveNotification,
                                                object: nil)
         
@@ -363,7 +363,7 @@ extension TrackingManager {
         Exponea.logger.log(.verbose, message: Constants.SuccessMessages.sessionEnd)
     }
 
-    @objc internal func applicationDidBecomeActive(_ notification: Notification) {
+    @objc internal func applicationDidBecomeActive() {
         // Cancel background task if we have any
         if let item = backgroundWorkItem {
             item.cancel()
