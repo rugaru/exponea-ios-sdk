@@ -218,7 +218,7 @@ extension TrackingManager: TrackingManagerType {
         
         // If we have immediate flushing mode, flush after tracking
         if case .immediate = flushingMode {
-            flushDataWith(delay: Constants.Session.flushDelay)
+            flushDataWith(delay: Constants.Tracking.immediateFlushDelay)
         }
     }
 
@@ -712,7 +712,7 @@ extension TrackingManager {
         switch flushingMode {
         case .immediate:
             // Immediately flush any data we might have
-            flushDataWith(delay: Constants.Session.flushDelay)
+            flushDataWith(delay: Constants.Tracking.immediateFlushDelay)
             
         case .periodic(let interval):
             // Schedule a timer for the specified interval

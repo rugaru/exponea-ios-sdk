@@ -72,8 +72,12 @@ enum Constants {
     enum Session {
         static let defaultTimeout = 6.0
         static let maxRetries = 5
-        static let flushDelay = 30.0
         static let sessionUpdateThreshold = 3.0
+    }
+
+    enum Tracking {
+        // To be able to amend session tracking with campaign data, we have to delay immediate event flushing a bit
+        static let immediateFlushDelay = 3.0
     }
 
     /// General constants
