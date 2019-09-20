@@ -6,12 +6,12 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:app.clickpark.cz</string>
-		<string>applinks:app.clickpark.cz</string>
+		<string>webcredentials:panaxeo.com</string>
+		<string>applinks:panaxeo.com</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.cp.test.app</string>
+		<string>group.com.exponea.ExponeaSDK-Example2</string>
 	</array>
 </dict>
 </plist>
